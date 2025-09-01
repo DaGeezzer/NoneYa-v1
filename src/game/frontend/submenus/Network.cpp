@@ -55,6 +55,14 @@ namespace rage
 
 namespace YimMenu::Submenus
 {
+	struct friend_player
+	{
+		int index = 0;
+		std::string name;
+		bool is_online = false;
+		bool is_same_title = false;
+	};
+
 	std::shared_ptr<persistent_player> current_player;
 	static char search[64];
 	static char name_buf[32];
@@ -91,7 +99,8 @@ namespace YimMenu::Submenus
 		// TODO: this needs a rework
 		auto session              = std::make_shared<Category>("Session");
 		auto spoofing             = std::make_shared<Category>("Spoofing");
-		auto database             = std::make_shared<Category>("Player Database");
+		auto friends			  = std::make_shared<Category>("Friends");
+		auto database             = std::make_shared<Category>("Player History");
 		auto sessionSwitcherGroup = std::make_shared<Group>("Session Switcher");
 		auto teleportGroup        = std::make_shared<Group>("Teleport");
 		auto toxicGroup           = std::make_shared<Group>("Toxic");
@@ -120,6 +129,128 @@ namespace YimMenu::Submenus
 
 		spoofing->AddItem(std::make_shared<BoolCommandItem>("hidegod"_J));
 		spoofing->AddItem(std::make_shared<BoolCommandItem>("hidespectate"_J));
+
+		friends->AddItem(std::make_shared<ImGuiItem>([] {
+			static int friend_count = NETWORK::NETWORK_GET_TOTAL_NUM_FRIENDS();
+			static std::vector<friend_player> friend_names;
+
+			ImGui::SetNextItemWidth(300.f);
+
+			ImGui::InputText("Player Name", search, sizeof(search));
+			ImGui::SameLine();
+			if (ImGui::Button("Refresh")) {
+				friend_count = NETWORK::NETWORK_GET_TOTAL_NUM_FRIENDS(); // Update friend count for new friends
+				friend_names.clear();
+			}
+
+			if (friend_names.empty() && friend_count > 0)
+			{
+				static auto notf = Notifications::Show("Friend Scanner", std::format("Scanning for {} friends.", friend_count), NotificationType::Success);
+
+				for (int i = 0; i < friend_count; i++)
+				{
+					friend_player fp;
+					fp.index = i;
+
+					int handle[13];
+					NETWORK::NETWORK_HANDLE_FROM_FRIEND(i, handle);
+
+					char name[64];
+					NETWORK::_NETWORK_GET_DISPLAY_NAME_FROM_HANDLE(handle, name);
+
+					fp.name = name;
+
+					fp.is_online = NETWORK::_NETWORK_IS_FRIEND_HANDLE_ONLINE(handle);
+					fp.is_same_title = NETWORK::_NETWORK_IS_FRIEND_HANDLE_IN_SAME_TITLE(handle);
+
+					friend_names.push_back(fp);
+				}
+
+				LOGF(INFO, "Found {} friends:", friend_names.size());
+				for (const auto& player : friend_names)
+					LOGF(INFO,
+					    "Friend {}: {} (index: {}) online: {}, same title: {}",
+					    player.index,
+					    player.name,
+					    player.index,
+					    player.is_online,
+					    player.is_same_title);
+			}
+
+			auto avail = ImGui::GetContentRegionAvail();
+
+			if (ImGui::BeginListBox("###players", {180, -1}))
+			{
+				if (friend_names.size() > 0)
+				{
+					std::string lower_search = search;
+					std::transform(lower_search.begin(), lower_search.end(), lower_search.begin(), ::tolower);
+
+					for (auto& player : friend_names)
+					{
+						auto friend_player = std::make_shared<persistent_player>();
+						friend_player->name = player.name;
+						friend_player->rid = player.index;           // We set the friend index
+						friend_player->is_modder = player.is_online; // Sketchy logic, but im too lazy to make great code changes
+						friend_player->trust = player.is_same_title;
+
+						draw_player_db_entry(friend_player, lower_search);
+					}
+				}
+				else
+				{
+					ImGui::Text("No Friends Found!");
+				}
+
+				ImGui::EndListBox();
+			}
+
+			if (auto selected = g_PlayerDatabase->GetSelected() && show_player_editor)
+			{
+				ImGui::SameLine();
+				if (ImGui::BeginChild("###selected_player", {500, static_cast<float>(*Pointers.ScreenResY - 388 - 38 * 4)}, false, ImGuiWindowFlags_NoBackground))
+				{
+					ImGui::InputText("Name", name_buf, sizeof(name_buf));
+
+					bool is_online = current_player->is_modder;
+					bool is_same_title = current_player->trust;
+
+					ImGui::Checkbox("Is Online", &is_online);
+					ImGui::Checkbox("Is Same Title", &is_same_title);
+
+					ImGui::BeginDisabled(!is_online || !is_same_title);
+
+					if (ImGui::Button("Invite"))
+					{
+						int handle[13];
+						NETWORK::NETWORK_HANDLE_FROM_FRIEND(current_player->rid, handle);
+
+						NETWORK::_NETWORK_SEND_SESSION_INVITE(handle, "", 0, 0, 0, 0);
+					}
+
+#ifdef _DEBUG
+					if (ImGui::Button("Join (Not working)"))
+					{
+						int handle[13];
+						NETWORK::NETWORK_HANDLE_FROM_FRIEND(current_player->rid, handle);
+
+						NETWORK::NETWORK_REQUEST_JOIN(*handle);
+					}
+#endif
+
+					ImGui::EndDisabled();
+
+					if (ImGui::Button("Hide Editor"))
+					{
+						show_player_editor = false;
+						show_new_player = true;
+					}
+
+					//ImGui::PopID();
+					ImGui::EndChild();
+				}
+			}
+		}));
 
 		database->AddItem(std::make_shared<ImGuiItem>([] {
 			ImGui::SetNextItemWidth(300.f);
@@ -303,6 +434,7 @@ namespace YimMenu::Submenus
 		AddCategory(std::move(session));
 		AddCategory(std::move(spoofing));
 		AddCategory(std::move(voice));
+		AddCategory(std::move(friends));
 		AddCategory(std::move(database));
 	}
 }
