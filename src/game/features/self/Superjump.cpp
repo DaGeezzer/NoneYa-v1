@@ -18,4 +18,8 @@ namespace YimMenu::Features
     };
 
     static SuperJump _SuperJump{"superjump", "Super Jump", "Jump higher than normal"};
+<<<<<<< HEAD
 } 
+=======
+}
+>>>>>>> horsemenu-pr7

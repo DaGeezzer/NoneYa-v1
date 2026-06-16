@@ -24,7 +24,11 @@ namespace YimMenu
     // s_m_y_newspaperboy_01
     // s_m_y_racrailworker_01
 
+<<<<<<< HEAD
     inline std::vector<std::pair<const char*, std::vector<PedModelDefinition>>> g_PedCategories =
+=======
+    inline std::vector<std::pair<const char*, std::vector<PedModelDefinition>>> g_PedCategories = 
+>>>>>>> horsemenu-pr7
     {
         {"Story", {
             {"player_zero"_J, "Arthur", 74},
@@ -207,15 +211,22 @@ namespace YimMenu
         }},
         {"Misc", {
             {"cs_princessisabeau"_J, "Princess Isabeau", 1}, // cut content
+<<<<<<< HEAD
             {"cs_balloonoperator"_J, "Balloon Operator", 4},
+=======
+            {"cs_balloonoperator"_J, "Balloon Operator", 4}, 
+>>>>>>> horsemenu-pr7
             {"cs_mysteriousstranger"_J, "Strange Man", 1},
             {"u_f_m_rhdnudewoman_01"_J, "Nude Woman", 1},
             {"cs_featherstonchambers"_J, "Featherston Chambers", 1}, // cut content
             {"cs_drhiggins"_J, "Dr. Higgins", 1}, // cut content
             {"A_M_Y_UniCorpse_01"_J, "A_M_Y_UniCorpse_01"},
+<<<<<<< HEAD
             {"A_M_M_UniCorpse_56"_J, "Pirate", 56},
 	    {"CS_AlienCorpse_01"_J, "Alien Corpse", 1}, // cut content
 	    {"CS_HeadlessHorseman_01"_J, "Headless Horseman", 1}, // cut content
+=======
+>>>>>>> horsemenu-pr7
         }},
     };
 }

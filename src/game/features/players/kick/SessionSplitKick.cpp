@@ -18,11 +18,18 @@ namespace YimMenu::Features
         {
             if (!player.IsValid() || player == Self::GetPlayer())
             {
+<<<<<<< HEAD
                 // Notifications::Show("SessionSplitKick", "Cannot kick invalid or self!", NotificationType::Error); // Uncomment if Notifications.hpp is included
                 return;
             }
 
             for (int i = 0; i < 5; i++)
+=======
+                return; // Do not execute if the player is invalid or the local player
+            }
+
+            for (int i = 0; i < 5; i++) // Execute the script 5 times
+>>>>>>> horsemenu-pr7
             {
                 if (auto thread = Scripts::FindScriptThread("net_ambient_content_evaluator"_J))
                 {
@@ -31,8 +38,12 @@ namespace YimMenu::Features
                     auto data = ScriptGlobal(1207480).As<ACE_HOST_DATA*>();
                     if (!data)
                     {
+<<<<<<< HEAD
                         // Notifications::Show("SessionSplitKick", "Failed to access global data!", NotificationType::Error);
                         return;
+=======
+                        return; // Exit if data is invalid
+>>>>>>> horsemenu-pr7
                     }
 
                     data->RuntimeData.SlotIndices[0] = 0;
@@ -52,6 +63,7 @@ namespace YimMenu::Features
                     data->Missions.Slots[0].IdentifierData.UID = {3, 0};
                     data->RuntimeData.RuntimeMissionDatas[0].Locations[0].State = ACEHostRuntimeState((__rdtsc() % 2000) + 5);
 
+<<<<<<< HEAD
                     // Notifications::Show("SessionSplitKick", "Split kick triggered!", NotificationType::Info);
                 }
                 else
@@ -60,6 +72,16 @@ namespace YimMenu::Features
                     return;
                 }
 
+=======
+                    player.GetData().m_UseSessionSplitKick = true;
+                }
+                else
+                {
+                    return; // Exit if the script thread is not found
+                }
+
+                // Add a random delay between 100ms and 500ms
+>>>>>>> horsemenu-pr7
                 std::this_thread::sleep_for(std::chrono::milliseconds(100 + (rand() % 400)));
             }
         }

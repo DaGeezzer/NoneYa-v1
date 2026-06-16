@@ -12,7 +12,11 @@ namespace YimMenu::Features
         {
             if (Self::GetPlayer().IsValid())
             {
+<<<<<<< HEAD
                 PLAYER::SET_PLAYER_MELEE_WEAPON_DAMAGE_MODIFIER(Self::GetPlayer().GetId(), 200.0f);
+=======
+                PLAYER::SET_PLAYER_MELEE_WEAPON_DAMAGE_MODIFIER(Self::GetPlayer().GetId(), 200.0f); // Damage modifier set to 200.0f
+>>>>>>> horsemenu-pr7
             }
         }
 
@@ -26,4 +30,8 @@ namespace YimMenu::Features
     };
 
     static Superpunch _Superpunch{"superpunch", "Superpunch", "Makes your punches 200x more powerful"};
+<<<<<<< HEAD
 } 
+=======
+}
+>>>>>>> horsemenu-pr7

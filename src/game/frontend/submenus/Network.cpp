@@ -55,6 +55,7 @@ namespace rage
 
 namespace YimMenu::Submenus
 {
+<<<<<<< HEAD
     std::shared_ptr<persistent_player> current_player;
     static char search[64];
     static char name_buf[32];
@@ -62,6 +63,23 @@ namespace YimMenu::Submenus
     static uint64_t new_player_rid;
     static bool show_player_editor = false;
     static bool show_new_player    = true;
+=======
+	struct friend_player
+	{
+		int index = 0;
+		std::string name;
+		bool is_online = false;
+		bool is_same_title = false;
+	};
+
+	std::shared_ptr<persistent_player> current_player;
+	static char search[64];
+	static char name_buf[32];
+	static char new_player_name_buf[32];
+	static uint64_t new_player_rid;
+	static bool show_player_editor = false;
+	static bool show_new_player    = true;
+>>>>>>> horsemenu-pr7
 
     void draw_player_db_entry(std::shared_ptr<persistent_player> player, const std::string& lower_search)
     {
@@ -85,6 +103,7 @@ namespace YimMenu::Submenus
         }
     }
 
+<<<<<<< HEAD
     Network::Network() :
         Submenu::Submenu("Network")
     {
@@ -97,6 +116,20 @@ namespace YimMenu::Submenus
         auto toxicGroup           = std::make_shared<Group>("Toxic");
         auto miscGroup            = std::make_shared<Group>("Misc");
         //auto adminGroup           = std::make_shared<Group>("Admin Settings");
+=======
+	Network::Network() :
+	    Submenu::Submenu("Network")
+	{
+		// TODO: this needs a rework
+		auto session              = std::make_shared<Category>("Session");
+		auto spoofing             = std::make_shared<Category>("Spoofing");
+		auto friends			  = std::make_shared<Category>("Friends");
+		auto database             = std::make_shared<Category>("Player History");
+		auto sessionSwitcherGroup = std::make_shared<Group>("Session Switcher");
+		auto teleportGroup        = std::make_shared<Group>("Teleport");
+		auto toxicGroup           = std::make_shared<Group>("Toxic");
+		auto miscGroup            = std::make_shared<Group>("Misc");
+>>>>>>> horsemenu-pr7
 
         sessionSwitcherGroup->AddItem(std::make_shared<Vector3CommandItem>("newsessionpos"_J));
         sessionSwitcherGroup->AddItem(std::make_shared<BoolCommandItem>("newsessionposse"_J));
@@ -110,6 +143,7 @@ namespace YimMenu::Submenus
         toxicGroup->AddItem(std::make_shared<CommandItem>("maxhonorall"_J));
         toxicGroup->AddItem(std::make_shared<CommandItem>("minhonorall"_J));
 
+<<<<<<< HEAD
         miscGroup->AddItem(std::make_shared<BoolCommandItem>("revealall"_J));
         miscGroup->AddItem(std::make_shared<BoolCommandItem>("blockalltelemetry"_J));
         miscGroup->AddItem(std::make_shared<BoolCommandItem>("locklobby"_J));
@@ -118,17 +152,152 @@ namespace YimMenu::Submenus
         session->AddItem(teleportGroup);
         session->AddItem(toxicGroup);
         session->AddItem(miscGroup);
+=======
+		miscGroup->AddItem(std::make_shared<BoolCommandItem>("revealall"_J));
+		miscGroup->AddItem(std::make_shared<BoolCommandItem>("blockalltelemetry"_J));
+		miscGroup->AddItem(std::make_shared<BoolCommandItem>("locklobby"_J));
+>>>>>>> horsemenu-pr7
 
         spoofing->AddItem(std::make_shared<BoolCommandItem>("hidegod"_J));
         spoofing->AddItem(std::make_shared<BoolCommandItem>("hidespectate"_J));
 
         //adminGroup->AddItem(std::make_shared<BoolCommandItem>("detectadmins"_J));
 
+<<<<<<< HEAD
         database->AddItem(std::make_shared<ImGuiItem>([] {
             ImGui::SetNextItemWidth(300.f);
             ImGui::PushID(3);
             ImGui::InputText("Player Name", search, sizeof(search));
             ImGui::PopID();
+=======
+		friends->AddItem(std::make_shared<ImGuiItem>([] {
+			static int friend_count = NETWORK::NETWORK_GET_TOTAL_NUM_FRIENDS();
+			static std::vector<friend_player> friend_names;
+
+			ImGui::SetNextItemWidth(300.f);
+
+			ImGui::InputText("Player Name", search, sizeof(search));
+			ImGui::SameLine();
+			if (ImGui::Button("Refresh")) {
+				friend_count = NETWORK::NETWORK_GET_TOTAL_NUM_FRIENDS(); // Update friend count for new friends
+				friend_names.clear();
+			}
+
+			if (friend_names.empty() && friend_count > 0)
+			{
+				static auto notf = Notifications::Show("Friend Scanner", std::format("Scanning for {} friends.", friend_count), NotificationType::Success);
+
+				for (int i = 0; i < friend_count; i++)
+				{
+					friend_player fp;
+					fp.index = i;
+
+					int handle[13];
+					NETWORK::NETWORK_HANDLE_FROM_FRIEND(i, handle);
+
+					char name[64];
+					NETWORK::_NETWORK_GET_DISPLAY_NAME_FROM_HANDLE(handle, name);
+
+					fp.name = name;
+
+					fp.is_online = NETWORK::_NETWORK_IS_FRIEND_HANDLE_ONLINE(handle);
+					fp.is_same_title = NETWORK::_NETWORK_IS_FRIEND_HANDLE_IN_SAME_TITLE(handle);
+
+					friend_names.push_back(fp);
+				}
+
+				LOGF(INFO, "Found {} friends:", friend_names.size());
+				for (const auto& player : friend_names)
+					LOGF(INFO,
+					    "Friend {}: {} (index: {}) online: {}, same title: {}",
+					    player.index,
+					    player.name,
+					    player.index,
+					    player.is_online,
+					    player.is_same_title);
+			}
+
+			auto avail = ImGui::GetContentRegionAvail();
+
+			if (ImGui::BeginListBox("###players", {180, -1}))
+			{
+				if (friend_names.size() > 0)
+				{
+					std::string lower_search = search;
+					std::transform(lower_search.begin(), lower_search.end(), lower_search.begin(), ::tolower);
+
+					for (auto& player : friend_names)
+					{
+						auto friend_player = std::make_shared<persistent_player>();
+						friend_player->name = player.name;
+						friend_player->rid = player.index;           // We set the friend index
+						friend_player->is_modder = player.is_online; // Sketchy logic, but im too lazy to make great code changes
+						friend_player->trust = player.is_same_title;
+
+						draw_player_db_entry(friend_player, lower_search);
+					}
+				}
+				else
+				{
+					ImGui::Text("No Friends Found!");
+				}
+
+				ImGui::EndListBox();
+			}
+
+			if (auto selected = g_PlayerDatabase->GetSelected() && show_player_editor)
+			{
+				ImGui::SameLine();
+				if (ImGui::BeginChild("###selected_player", {500, static_cast<float>(*Pointers.ScreenResY - 388 - 38 * 4)}, false, ImGuiWindowFlags_NoBackground))
+				{
+					ImGui::InputText("Name", name_buf, sizeof(name_buf));
+
+					bool is_online = current_player->is_modder;
+					bool is_same_title = current_player->trust;
+
+					ImGui::Checkbox("Is Online", &is_online);
+					ImGui::Checkbox("Is Same Title", &is_same_title);
+
+					ImGui::BeginDisabled(!is_online || !is_same_title);
+
+					if (ImGui::Button("Invite"))
+					{
+						int handle[13];
+						NETWORK::NETWORK_HANDLE_FROM_FRIEND(current_player->rid, handle);
+
+						NETWORK::_NETWORK_SEND_SESSION_INVITE(handle, "", 0, 0, 0, 0);
+					}
+
+#ifdef _DEBUG
+					if (ImGui::Button("Join (Not working)"))
+					{
+						int handle[13];
+						NETWORK::NETWORK_HANDLE_FROM_FRIEND(current_player->rid, handle);
+
+						NETWORK::NETWORK_REQUEST_JOIN(*handle);
+					}
+#endif
+
+					ImGui::EndDisabled();
+
+					if (ImGui::Button("Hide Editor"))
+					{
+						show_player_editor = false;
+						show_new_player = true;
+					}
+
+					//ImGui::PopID();
+					ImGui::EndChild();
+				}
+			}
+		}));
+
+		database->AddItem(std::make_shared<ImGuiItem>([] {
+			ImGui::SetNextItemWidth(300.f);
+			ImGui::PushID(3);
+			ImGui::InputText("Player Name", search, sizeof(search));
+			ImGui::PopID();
+>>>>>>> horsemenu-pr7
 
             if (ImGui::BeginListBox("###players", {180, static_cast<float>(*Pointers.ScreenResY - 400 - 38 * 4)}))
             {
@@ -231,10 +400,46 @@ namespace YimMenu::Submenus
             static std::map<const char*, std::string> icons = {{"", "None"}, {(const char*)u8"\u2211", "Rockstar Icon"}};
             ImGui::Text("Spoofed data will not appear locally, and will only be visible when joining a new session,\n or when a player joins you");
 
+<<<<<<< HEAD
             ImGui::Text("Name");
             ImGui::Checkbox("Spoof Name", &g_SpoofingStorage.spoofName);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Spoof your name");
+=======
+					if (ImGui::Button("Hide Editor"))
+					{
+						show_player_editor = false;
+						show_new_player    = true;
+					}
+					ImGui::PopID();
+				}
+			}
+			if (show_new_player)
+			{
+				ImGui::PushID(2);
+				ImGui::NewLine();
+				ImGui::InputText("Player Name", new_player_name_buf, sizeof(new_player_name_buf));
+				ImGui::InputScalar("RID", ImGuiDataType_U64, &new_player_rid);
+				if (ImGui::Button("Add"))
+				{
+					current_player = g_PlayerDatabase->GetOrCreatePlayer(new_player_rid, new_player_name_buf);
+					memset(new_player_name_buf, 0, sizeof(new_player_name_buf));
+				}
+				ImGui::PopID();
+			}
+		}));
+
+		static std::string nameBuf, colorBuf = "";
+		static const char* iconBuf = "";
+		auto infoSpoofingGroup    = std::make_shared<Group>("Info Spoofing");
+		auto blipSpoofingGroup    = std::make_shared<Group>("Blip Spoofing");
+		auto sessionSpoofingGroup = std::make_shared<Group>("Session Spoofing");
+
+		infoSpoofingGroup->AddItem(std::make_shared<ImGuiItem>([=] {
+			static std::map<std::string, std::string> colors = {{"", "None"}, {"~e~", "Red"}, {"~f~", "Off White"}, {"~p~", "White"}, {"~o~", "Yellow"}, {"~q~", "Pure White"}, {"~d~", "Orange"}, {"~m~", "Light Grey"}, {"~t~", "Grey"}, {"~v~", "Black"}, {"~pa~", "Blue"}, {"~t1~", "Purple"}, {"~t2~", "Orange"}, {"~t3~", "Teal"}, {"~t4~", "Light Yellow"}, {"~t5~", "Pink"}, {"~t6~", "Green"}, {"~t7~", "Dark Blue"}};
+			static std::map<const char*, std::string> icons = {{"", "None"}, {(const char*)u8"\u2211", "Rockstar Icon"}};
+			ImGui::Text("Spoofed data will not appear locally, and will only be visible when joining a new session,\n or when a player joins you");
+>>>>>>> horsemenu-pr7
 
             if (ImGui::BeginCombo("Color Prefix", colors[colorBuf].c_str()))
             {
@@ -305,10 +510,19 @@ namespace YimMenu::Submenus
 
         auto voice = BuildVoiceMenu();
 
+<<<<<<< HEAD
         AddCategory(std::move(session));
         AddCategory(std::move(spoofing));
         AddCategory(std::move(voice));
         AddCategory(std::move(database));
         //AddCategory(std::move(adminDetection));
     }
+=======
+		AddCategory(std::move(session));
+		AddCategory(std::move(spoofing));
+		AddCategory(std::move(voice));
+		AddCategory(std::move(friends));
+		AddCategory(std::move(database));
+	}
+>>>>>>> horsemenu-pr7
 }

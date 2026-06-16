@@ -35,4 +35,8 @@ namespace YimMenu::Hooks
         Renderer::VkSetDevice(device);
         return BaseHook::Get<Vulkan::AcquireNextImageKHR, DetourHook<decltype(&AcquireNextImageKHR)>>()->Original()(device, swapchain, timeout, semaphore, fence, pImageIndex);
     }
+<<<<<<< HEAD
 } 
+=======
+}
+>>>>>>> horsemenu-pr7

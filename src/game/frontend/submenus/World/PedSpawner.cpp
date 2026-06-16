@@ -169,12 +169,29 @@ namespace YimMenu::Submenus
                 auto blip = MAP::BLIP_ADD_FOR_ENTITY(Joaat("BLIP_STYLE_COMPANION"), ped.GetHandle());
                 MAP::BLIP_ADD_MODIFIER(blip, Joaat("BLIP_MODIFIER_COMPANION_DOG"));
 
+<<<<<<< HEAD
     }
 
     static void ApplyKillEmAllSettings(YimMenu::Ped& ped)
     {
         static Hash killEmAllGroupHash = 0;
         static bool killEmAllGroupInitialized = false;
+=======
+				if (companion)
+				{
+					int group = PED::GET_PED_GROUP_INDEX(YimMenu::Self::GetPed().GetHandle());
+					if (!PED::DOES_GROUP_EXIST(group))
+					{
+						group = PED::CREATE_GROUP(0);
+						PED::SET_PED_AS_GROUP_LEADER(YimMenu::Self::GetPed().GetHandle(), group, false);
+					}
+
+					ENTITY::SET_ENTITY_AS_MISSION_ENTITY(ped.GetHandle(), true, true);
+					PED::SET_PED_AS_GROUP_MEMBER(ped.GetHandle(), group);
+					PED::SET_PED_CAN_BE_TARGETTED_BY_PLAYER(ped.GetHandle(), YimMenu::Self::GetPlayer().GetId(), false);
+					PED::SET_PED_RELATIONSHIP_GROUP_HASH(
+					    ped.GetHandle(), PED::GET_PED_RELATIONSHIP_GROUP_HASH(YimMenu::Self::GetPed().GetHandle()));
+>>>>>>> horsemenu-pr7
 
         static const std::unordered_set<Hash> blacklistedModels = {   //I AM A TEST
             static_cast<Hash>(Joaat("A_M_M_ShopKeep_01")),
@@ -186,6 +203,7 @@ namespace YimMenu::Submenus
             static_cast<Hash>(Joaat("U_M_M_NbxGeneralStoreOwner_01")),
         };
 
+<<<<<<< HEAD
         if (!ENTITY::DOES_ENTITY_EXIST(ped.GetHandle()))
         {
             return;
@@ -202,6 +220,37 @@ namespace YimMenu::Submenus
 
         int pedHandle = ped.GetHandle();
         int selfPedHandle = Self::GetPed().GetHandle();
+=======
+					DECORATOR::DECOR_SET_INT(ped.GetHandle(), "SH_CMP_companion", 2);
+
+					if (ped.IsAnimal())
+					{
+						FLOCK::SET_ANIMAL_TUNING_FLOAT_PARAM(ped.GetHandle(), 104, 0.0);
+						FLOCK::SET_ANIMAL_TUNING_FLOAT_PARAM(ped.GetHandle(), 105, 0.0);
+						FLOCK::SET_ANIMAL_TUNING_FLOAT_PARAM(ped.GetHandle(), 10, 0.0);
+						FLOCK::SET_ANIMAL_TUNING_FLOAT_PARAM(ped.GetHandle(), 146, 0.0);
+						FLOCK::SET_ANIMAL_TUNING_FLOAT_PARAM(ped.GetHandle(), 113, 0.0);
+						FLOCK::SET_ANIMAL_TUNING_FLOAT_PARAM(ped.GetHandle(), 114, 0.0);
+						FLOCK::SET_ANIMAL_TUNING_FLOAT_PARAM(ped.GetHandle(), 115, 0.0);
+						FLOCK::SET_ANIMAL_TUNING_FLOAT_PARAM(ped.GetHandle(), 116, 0.0);
+						FLOCK::SET_ANIMAL_TUNING_FLOAT_PARAM(ped.GetHandle(), 117, 0.0);
+						FLOCK::SET_ANIMAL_TUNING_FLOAT_PARAM(ped.GetHandle(), 118, 0.0);
+						FLOCK::SET_ANIMAL_TUNING_FLOAT_PARAM(ped.GetHandle(), 119, 0.0);
+						FLOCK::SET_ANIMAL_TUNING_FLOAT_PARAM(ped.GetHandle(), 111, 0.0);
+						FLOCK::SET_ANIMAL_TUNING_FLOAT_PARAM(ped.GetHandle(), 107, 0.0);
+					}
+					PED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(ped.GetHandle(), false);
+
+					ped.SetConfigFlag(PedConfigFlag::_0x16A14D9A, false);
+					ped.SetConfigFlag(PedConfigFlag::_DisableHorseFleeILO, true);
+					ped.SetConfigFlag(PedConfigFlag::_0x74F95F2E, false);
+					ped.SetConfigFlag(PedConfigFlag::Avoidance_Ignore_All, false);
+					ped.SetConfigFlag(PedConfigFlag::DisableShockingEvents, false);
+					ped.SetConfigFlag(PedConfigFlag::DisablePedAvoidance, false);
+					ped.SetConfigFlag(PedConfigFlag::DisableExplosionReactions, false);
+					ped.SetConfigFlag(PedConfigFlag::DisableEvasiveStep, false);
+					ped.SetConfigFlag(PedConfigFlag::DisableHorseGunshotFleeResponse, true);
+>>>>>>> horsemenu-pr7
 
         PED::SET_PED_RELATIONSHIP_GROUP_HASH(pedHandle, killEmAllGroupHash);
 

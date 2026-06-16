@@ -32,6 +32,10 @@ namespace YimMenu::Features
                 sync.GetBuffer().Write<bool>(false, 1);
                 sync.Send(player, 13, true, true);
 
+<<<<<<< HEAD
+=======
+                // Add a random delay between 100ms and 500ms
+>>>>>>> horsemenu-pr7
                 std::this_thread::sleep_for(std::chrono::milliseconds(100 + (rand() % 400)));
             }
         }

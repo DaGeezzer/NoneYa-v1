@@ -67,7 +67,11 @@ namespace
     constexpr int horseRearRightFootBone  = 33646;
     constexpr int horseRearRightToeBone0  = 41273;
     constexpr int horseRearRightToeBone1  = 41274;
+<<<<<<< HEAD
 } // namespace
+=======
+}
+>>>>>>> horsemenu-pr7
 
 namespace YimMenu::Features
 {
@@ -79,9 +83,15 @@ namespace YimMenu::Features
     BoolCommand _ESPSkeleton("espskeletonplayers", "Show Player Skeleton", "Should the ESP draw player skeletons?");
 
     // Initialize colors with alpha set to 1.0f (fully opaque)
+<<<<<<< HEAD
     ColorCommand _NameColorPlayers("namecolorplayers", "Player Name Color", "Changes the color of the name ESP for players", ImVec4{ 1.0f, 1.0f, 1.0f, 1.0f });
     ColorCommand _DistanceColorPlayers("distancecolorplayers", "Player Distance Color", "Changes the color of the distance ESP for players", ImVec4{ 1.0f, 1.0f, 1.0f, 1.0f });
     ColorCommand _SkeletonColorPlayers("skeletoncolorplayers", "Player Skeleton Color", "Changes the color of the skeleton ESP for players", ImVec4{ 1.0f, 1.0f, 1.0f, 1.0f });
+=======
+    ColorCommand _NameColorPlayers("namecolorplayers", "Player Name Color", "Changes the color of the name ESP for players", ImVec4{1.0f, 1.0f, 1.0f, 1.0f});
+    ColorCommand _DistanceColorPlayers("distancecolorplayers", "Player Distance Color", "Changes the color of the distance ESP for players", ImVec4{1.0f, 1.0f, 1.0f, 1.0f});
+    ColorCommand _SkeletonColorPlayers("skeletoncolorplayers", "Player Skeleton Color", "Changes the color of the skeleton ESP for players", ImVec4{1.0f, 1.0f, 1.0f, 1.0f});
+>>>>>>> horsemenu-pr7
 
     // Peds
     BoolCommand _ESPDrawPeds("espdrawpeds", "Draw Peds", "Should the ESP draw peds?");
@@ -94,6 +104,7 @@ namespace YimMenu::Features
     BoolCommand _ESPSkeletonHorse("espskeletonhorse", "Show Horse Skeleton", "Should the ESP draw horse skeletons?");
 
     // Initialize colors with alpha set to 1.0f (fully opaque)
+<<<<<<< HEAD
     ColorCommand _HashColorPeds("hashcolorpeds", "Ped Hash Color", "Changes the color of the hash ESP for peds", ImVec4{ 1.0f, 1.0f, 1.0f, 1.0f });
     ColorCommand _DistanceColorPeds("distancecolorpeds", "Ped Distance Color", "Changes the color of the distance ESP for peds", ImVec4{ 1.0f, 1.0f, 1.0f, 1.0f });
     ColorCommand _SkeletonColorPeds("skeletoncolorpeds", "Ped Skeleton Color", "Changes the color of the skeleton ESP for peds", ImVec4{ 1.0f, 1.0f, 1.0f, 1.0f });
@@ -115,6 +126,26 @@ namespace YimMenu
             return Orange;
         else
             return Red;
+=======
+    ColorCommand _HashColorPeds("hashcolorpeds", "Ped Hash Color", "Changes the color of the hash ESP for peds", ImVec4{1.0f, 1.0f, 1.0f, 1.0f});
+    ColorCommand _DistanceColorPeds("distancecolorpeds", "Ped Distance Color", "Changes the color of the distance ESP for peds", ImVec4{1.0f, 1.0f, 1.0f, 1.0f});
+    ColorCommand _SkeletonColorPeds("skeletoncolorpeds", "Ped Skeleton Color", "Changes the color of the skeleton ESP for peds", ImVec4{1.0f, 1.0f, 1.0f, 1.0f});
+    ColorCommand _SkeletonColorHorse("skeletoncolorhorse", "Horse Skeleton Color", "Changes the color of the skeleton ESP for horses", ImVec4{1.0f, 1.0f, 1.0f, 1.0f});
+}
+
+namespace YimMenu
+{
+    static ImVec4 Green = ImVec4(0.29f, 0.69f, 0.34f, 1.f);
+    static ImVec4 Orange = ImVec4(0.69f, 0.49f, 0.29f, 1.f);
+    static ImVec4 Red = ImVec4(0.69f, 0.29f, 0.29f, 1.f);
+    static ImVec4 Blue = ImVec4(0.36f, 0.71f, 0.89f, 1.f);
+
+    ImColor ESP::GetColorBasedOnDistance(float distance)
+    {
+        if (distance < 100.f) return Green;
+        else if (distance < 300.f) return Orange;
+        else return Red;
+>>>>>>> horsemenu-pr7
     }
 
     void ESP::DrawTextInfo(ImDrawList* drawList, const ImVec2& position, const std::string& text, ImColor color)
@@ -125,7 +156,11 @@ namespace YimMenu
     ImVec2 ESP::boneToScreen(rage::fvector3 bone)
     {
         float screen_x, screen_y;
+<<<<<<< HEAD
         float boneCoords[3] = { bone.x, bone.y, bone.z };
+=======
+        float boneCoords[3] = {bone.x, bone.y, bone.z};
+>>>>>>> horsemenu-pr7
 
         Pointers.WorldToScreen(boneCoords, &screen_x, &screen_y);
 
@@ -134,6 +169,7 @@ namespace YimMenu
 
     void ESP::DrawSkeleton(Ped ped, ImDrawList* drawList, ImColor color)
     {
+<<<<<<< HEAD
         auto headPos         = boneToScreen(ped.GetBonePosition(headBone));
         auto neckPos         = boneToScreen(ped.GetBonePosition(neckBone));
         auto torsoPos        = boneToScreen(ped.GetBonePosition(torsoBone));
@@ -147,6 +183,21 @@ namespace YimMenu
         auto rightKneePos    = boneToScreen(ped.GetBonePosition(rightKneeBone));
         auto leftFootPos     = boneToScreen(ped.GetBonePosition(leftFootBone));
         auto rightFootPos    = boneToScreen(ped.GetBonePosition(rightFootBone));
+=======
+        auto headPos = boneToScreen(ped.GetBonePosition(headBone));
+        auto neckPos = boneToScreen(ped.GetBonePosition(neckBone));
+        auto torsoPos = boneToScreen(ped.GetBonePosition(torsoBone));
+        auto leftShoulderPos = boneToScreen(ped.GetBonePosition(leftShoulderBone));
+        auto rightShoulderPos = boneToScreen(ped.GetBonePosition(rightShoulderBone));
+        auto leftElbowPos = boneToScreen(ped.GetBonePosition(leftElbowBone));
+        auto rightElbowPos = boneToScreen(ped.GetBonePosition(rightElbowBone));
+        auto leftHandPos = boneToScreen(ped.GetBonePosition(leftHandBone));
+        auto rightHandPos = boneToScreen(ped.GetBonePosition(rightHandBone));
+        auto leftKneePos = boneToScreen(ped.GetBonePosition(leftKneeBone));
+        auto rightKneePos = boneToScreen(ped.GetBonePosition(rightKneeBone));
+        auto leftFootPos = boneToScreen(ped.GetBonePosition(leftFootBone));
+        auto rightFootPos = boneToScreen(ped.GetBonePosition(rightFootBone));
+>>>>>>> horsemenu-pr7
 
         drawList->AddLine(headPos, neckPos, color, 1.5f);
         drawList->AddLine(neckPos, leftShoulderPos, color, 1.5f);
@@ -165,10 +216,17 @@ namespace YimMenu
     void ESP::DrawHorseSkeleton(Ped horse, ImDrawList* drawList, ImColor color)
     {
         // Head and neck
+<<<<<<< HEAD
         auto headPos    = boneToScreen(horse.GetBonePosition(horseHeadBone));
         auto neckPos0   = boneToScreen(horse.GetBonePosition(horseNeckBone0));
         auto torsoPos   = boneToScreen(horse.GetBonePosition(horseTorsoBone));
         auto pelvisPos  = boneToScreen(horse.GetBonePosition(horsePelvisBone));
+=======
+        auto headPos = boneToScreen(horse.GetBonePosition(horseHeadBone));
+        auto neckPos0 = boneToScreen(horse.GetBonePosition(horseNeckBone0));
+        auto torsoPos = boneToScreen(horse.GetBonePosition(horseTorsoBone));
+        auto pelvisPos = boneToScreen(horse.GetBonePosition(horsePelvisBone));
+>>>>>>> horsemenu-pr7
 
         drawList->AddLine(headPos, neckPos0, color, 1.5f);
         drawList->AddLine(neckPos0, torsoPos, color, 1.5f);
@@ -176,10 +234,17 @@ namespace YimMenu
 
         // Front left leg
         auto frontLeftUpperArmPos = boneToScreen(horse.GetBonePosition(horseFrontLeftUpperArmBone));
+<<<<<<< HEAD
         auto frontLeftForearmPos  = boneToScreen(horse.GetBonePosition(horseFrontLeftForearmBone));
         auto frontLeftHandPos     = boneToScreen(horse.GetBonePosition(horseFrontLeftHandBone));
         auto frontLeftFinger0Pos  = boneToScreen(horse.GetBonePosition(horseFrontLeftFingerBone0));
         auto frontLeftFinger1Pos  = boneToScreen(horse.GetBonePosition(horseFrontLeftFingerBone1));
+=======
+        auto frontLeftForearmPos = boneToScreen(horse.GetBonePosition(horseFrontLeftForearmBone));
+        auto frontLeftHandPos = boneToScreen(horse.GetBonePosition(horseFrontLeftHandBone));
+        auto frontLeftFinger0Pos = boneToScreen(horse.GetBonePosition(horseFrontLeftFingerBone0));
+        auto frontLeftFinger1Pos = boneToScreen(horse.GetBonePosition(horseFrontLeftFingerBone1));
+>>>>>>> horsemenu-pr7
 
         drawList->AddLine(neckPos0, frontLeftUpperArmPos, color, 1.5f);
         drawList->AddLine(frontLeftUpperArmPos, frontLeftForearmPos, color, 1.5f);
@@ -189,10 +254,17 @@ namespace YimMenu
 
         // Front right leg
         auto frontRightUpperArmPos = boneToScreen(horse.GetBonePosition(horseFrontRightUpperArmBone));
+<<<<<<< HEAD
         auto frontRightForearmPos  = boneToScreen(horse.GetBonePosition(horseFrontRightForearmBone));
         auto frontRightHandPos     = boneToScreen(horse.GetBonePosition(horseFrontRightHandBone));
         auto frontRightFinger0Pos  = boneToScreen(horse.GetBonePosition(horseFrontRightFingerBone0));
         auto frontRightFinger1Pos  = boneToScreen(horse.GetBonePosition(horseFrontRightFingerBone1));
+=======
+        auto frontRightForearmPos = boneToScreen(horse.GetBonePosition(horseFrontRightForearmBone));
+        auto frontRightHandPos = boneToScreen(horse.GetBonePosition(horseFrontRightHandBone));
+        auto frontRightFinger0Pos = boneToScreen(horse.GetBonePosition(horseFrontRightFingerBone0));
+        auto frontRightFinger1Pos = boneToScreen(horse.GetBonePosition(horseFrontRightFingerBone1));
+>>>>>>> horsemenu-pr7
 
         drawList->AddLine(neckPos0, frontRightUpperArmPos, color, 1.5f);
         drawList->AddLine(frontRightUpperArmPos, frontRightForearmPos, color, 1.5f);
@@ -202,10 +274,17 @@ namespace YimMenu
 
         // Rear left leg
         auto rearLeftThighPos = boneToScreen(horse.GetBonePosition(horseRearLeftThighBone));
+<<<<<<< HEAD
         auto rearLeftCalfPos  = boneToScreen(horse.GetBonePosition(horseRearLeftCalfBone));
         auto rearLeftFootPos  = boneToScreen(horse.GetBonePosition(horseRearLeftFootBone));
         auto rearLeftToe0Pos  = boneToScreen(horse.GetBonePosition(horseRearLeftToeBone0));
         auto rearLeftToe1Pos  = boneToScreen(horse.GetBonePosition(horseRearLeftToeBone1));
+=======
+        auto rearLeftCalfPos = boneToScreen(horse.GetBonePosition(horseRearLeftCalfBone));
+        auto rearLeftFootPos = boneToScreen(horse.GetBonePosition(horseRearLeftFootBone));
+        auto rearLeftToe0Pos = boneToScreen(horse.GetBonePosition(horseRearLeftToeBone0));
+        auto rearLeftToe1Pos = boneToScreen(horse.GetBonePosition(horseRearLeftToeBone1));
+>>>>>>> horsemenu-pr7
 
         drawList->AddLine(pelvisPos, rearLeftThighPos, color, 1.5f);
         drawList->AddLine(rearLeftThighPos, rearLeftCalfPos, color, 1.5f);
@@ -215,10 +294,17 @@ namespace YimMenu
 
         // Rear right leg
         auto rearRightThighPos = boneToScreen(horse.GetBonePosition(horseRearRightThighBone));
+<<<<<<< HEAD
         auto rearRightCalfPos  = boneToScreen(horse.GetBonePosition(horseRearRightCalfBone));
         auto rearRightFootPos  = boneToScreen(horse.GetBonePosition(horseRearRightFootBone));
         auto rearRightToe0Pos  = boneToScreen(horse.GetBonePosition(horseRearRightToeBone0));
         auto rearRightToe1Pos  = boneToScreen(horse.GetBonePosition(horseRearRightToeBone1));
+=======
+        auto rearRightCalfPos = boneToScreen(horse.GetBonePosition(horseRearRightCalfBone));
+        auto rearRightFootPos = boneToScreen(horse.GetBonePosition(horseRearRightFootBone));
+        auto rearRightToe0Pos = boneToScreen(horse.GetBonePosition(horseRearRightToeBone0));
+        auto rearRightToe1Pos = boneToScreen(horse.GetBonePosition(horseRearRightToeBone1));
+>>>>>>> horsemenu-pr7
 
         drawList->AddLine(pelvisPos, rearRightThighPos, color, 1.5f);
         drawList->AddLine(rearRightThighPos, rearRightCalfPos, color, 1.5f);
@@ -229,6 +315,7 @@ namespace YimMenu
 
     void ESP::DrawPlayer(Player& plyr, ImDrawList* drawList)
     {
+<<<<<<< HEAD
         if (!plyr.IsValid() || !plyr.GetPed().IsValid() || plyr == Self::GetPlayer() || boneToScreen(plyr.GetPed().GetBonePosition(torsoBone)).x == 0 || (plyr.GetPed().IsDead() && !Features::_ESPDrawDeadPlayers.GetState()))
             return;
 
@@ -237,6 +324,18 @@ namespace YimMenu
 
         const auto originalFontSize = ImGui::GetFont()->Scale;
         auto* currentFont           = ImGui::GetFont();
+=======
+        if (!plyr.IsValid() || !plyr.GetPed().IsValid() || plyr == Self::GetPlayer()
+            || boneToScreen(plyr.GetPed().GetBonePosition(torsoBone)).x == 0
+            || (plyr.GetPed().IsDead() && !Features::_ESPDrawDeadPlayers.GetState()))
+            return;
+
+        float distanceToPlayer = Self::GetPed().GetPosition().GetDistance(plyr.GetPed().GetBonePosition(torsoBone));
+        ImColor colorBasedOnDistance = GetColorBasedOnDistance(distanceToPlayer);
+
+        const auto originalFontSize = ImGui::GetFont()->Scale;
+        auto* currentFont = ImGui::GetFont();
+>>>>>>> horsemenu-pr7
         currentFont->Scale *= 1.2;
         ImGui::PushFont(ImGui::GetFont());
 
@@ -248,9 +347,15 @@ namespace YimMenu
 
         if (Features::_ESPDistance.GetState())
         {
+<<<<<<< HEAD
             auto headPos     = boneToScreen(plyr.GetPed().GetBonePosition(headBone));
             std::string distanceStr = std::to_string(static_cast<int>(distanceToPlayer)) + "m";
             DrawTextInfo(drawList, { headPos.x, headPos.y + 20 }, distanceStr, colorBasedOnDistance);
+=======
+            auto headPos = boneToScreen(plyr.GetPed().GetBonePosition(headBone));
+            std::string distanceStr = std::to_string((int)distanceToPlayer) + "m";
+            DrawTextInfo(drawList, {headPos.x, headPos.y + 20}, distanceStr, colorBasedOnDistance);
+>>>>>>> horsemenu-pr7
         }
 
         currentFont->Scale = originalFontSize;
@@ -267,11 +372,19 @@ namespace YimMenu
         if (!ped.IsValid() || ped.IsPlayer() || ped == Self::GetPlayer().GetPed() || boneToScreen(ped.GetBonePosition(torsoBone)).x == 0 || (ped.IsDead() && !Features::_ESPDrawDeadPeds.GetState()))
             return;
 
+<<<<<<< HEAD
         float distanceToPed       = Self::GetPed().GetPosition().GetDistance(ped.GetBonePosition(torsoBone));
         ImColor colorBasedOnDistance = GetColorBasedOnDistance(distanceToPed);
 
         const auto originalFontSize = ImGui::GetFont()->Scale;
         auto* currentFont           = ImGui::GetFont();
+=======
+        float distanceToPed = Self::GetPed().GetPosition().GetDistance(ped.GetBonePosition(torsoBone));
+        ImColor colorBasedOnDistance = GetColorBasedOnDistance(distanceToPed);
+
+        const auto originalFontSize = ImGui::GetFont()->Scale;
+        auto* currentFont = ImGui::GetFont();
+>>>>>>> horsemenu-pr7
         currentFont->Scale *= 1.2;
         ImGui::PushFont(ImGui::GetFont());
 
@@ -280,15 +393,25 @@ namespace YimMenu
         if (Features::_ESPModelPeds.GetState())
         {
             if (auto it = Data::g_PedModels.find(ped.GetModel()); it != Data::g_PedModels.end())
+<<<<<<< HEAD
                 info += std::format("{} (0x{:08X}) ", it->second, static_cast<joaat_t>(ped.GetModel())); // Show both name and hash
             else
                 info += std::format("0x{:08X} ", static_cast<joaat_t>(ped.GetModel())); // Show only hash if name not found
+=======
+                info += std::format("{} ", it->second);
+            else
+                info += std::format("0x{:08X} ", (joaat_t)ped.GetModel());
+>>>>>>> horsemenu-pr7
         }
 
         if (Features::_ESPNetworkInfoPeds.GetState() && ped.IsNetworked())
         {
             auto owner = Player(ped.GetOwner());
+<<<<<<< HEAD
             auto id    = ped.GetNetworkObjectId();
+=======
+            auto id = ped.GetNetworkObjectId();
+>>>>>>> horsemenu-pr7
             info += std::format("{} {} ", id, owner.GetName());
         }
 
@@ -311,9 +434,15 @@ namespace YimMenu
 
         if (Features::_ESPDistancePeds.GetState())
         {
+<<<<<<< HEAD
             auto headPos     = boneToScreen(ped.GetBonePosition(headBone));
             std::string distanceStr = std::to_string(static_cast<int>(distanceToPed)) + "m";
             DrawTextInfo(drawList, { headPos.x, headPos.y + 20 }, distanceStr, colorBasedOnDistance);
+=======
+            auto headPos = boneToScreen(ped.GetBonePosition(headBone));
+            std::string distanceStr = std::to_string((int)distanceToPed) + "m";
+            DrawTextInfo(drawList, {headPos.x, headPos.y + 20}, distanceStr, colorBasedOnDistance);
+>>>>>>> horsemenu-pr7
         }
 
         currentFont->Scale = originalFontSize;
@@ -354,4 +483,8 @@ namespace YimMenu
             }
         }
     }
+<<<<<<< HEAD
 } // GrymsArchive
+=======
+}
+>>>>>>> horsemenu-pr7

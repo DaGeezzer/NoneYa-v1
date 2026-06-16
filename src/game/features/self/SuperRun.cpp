@@ -18,15 +18,27 @@ namespace YimMenu::Features
                 if (TASK::IS_PED_RUNNING(ped.GetHandle()) || TASK::IS_PED_SPRINTING(ped.GetHandle()))
                 {
                     ENTITY::APPLY_FORCE_TO_ENTITY(ped.GetHandle(),
+<<<<<<< HEAD
                         1,
                         0.0f, 15.0f, 0.0f,
                         0.0f, 0.0f, 0.0f,
                         1, 1, 1,
                         true, false, true);
+=======
+                                                  1,
+                                                  0.0f, 20.0f, 0.0f,
+                                                  0.0f, 0.0f, 0.0f,
+                                                  1, 1, 1,
+                                                  true, false, true);
+>>>>>>> horsemenu-pr7
                 }
             }
         }
     };
 
     static SuperRun _Superrun{"superrun", "Super Run", "Run faster than normal"};
+<<<<<<< HEAD
 } 
+=======
+}
+>>>>>>> horsemenu-pr7
